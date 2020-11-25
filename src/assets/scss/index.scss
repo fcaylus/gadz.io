@@ -1,0 +1,39 @@
+%fullscreen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#root {
+  @extend %fullscreen;
+}
+
+#resources-container {
+  display: none !important;
+}
+
+#dead-popup,
+#start-popup {
+  @extend %fullscreen;
+}
+
+.card {
+  padding: 16px 32px;
+
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 15px;
+
+  text-align: center;
+}
+
+.card:hover {
+  background-color: grey;
+}
