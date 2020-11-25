@@ -37,3 +37,17 @@ body {
 .card:hover {
   background-color: grey;
 }
+
+#github-link {
+  background: url("../img/github.png") center;
+  background-size: contain;
+
+  width: 32px;
+  height: 32px;
+
+  z-index: 2;
+
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
