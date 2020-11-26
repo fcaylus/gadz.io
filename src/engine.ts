@@ -16,8 +16,11 @@ export class Engine {
     startTime: number;
     lastCounterUpdate: number;
 
+    isStopRequested: boolean;
+
     constructor() {
         this.firstRender = true;
+        this.isStopRequested = false;
 
         this.resourcesContainer = document.getElementById('resources-container');
         this.counterElement = document.getElementById('counter');
@@ -45,7 +48,7 @@ export class Engine {
     gameOver() {
         console.log('💀  Game over !');
         isDead = true;
-        isGameRunning = false;
+        this.isStopRequested = true;
     }
 
     /**
@@ -55,13 +58,13 @@ export class Engine {
         // Main game loop
         const _loop = () => {
             // Stop the game
-            if (!this.firstRender && !isGameRunning) {
+            if (!this.firstRender && (this.isStopRequested || !isGameRunning)) {
                 if (isDead) {
                     document.getElementById('dead-popup').style.display = 'flex';
                 }
 
                 this.gameContainer.stop();
-
+                isGameRunning = false;
                 return;
             }
 
@@ -94,6 +97,7 @@ export class Engine {
 
                     isDead = false;
                     isGameRunning = true;
+                    this.isStopRequested = false;
                     this.newGame(gameLoop);
                 } else {
                     // Simply propagate the event
@@ -119,6 +123,4 @@ export class Engine {
             this.counterElement.innerText = `${Intl.NumberFormat('fr-FR').format(distance)} m`;
         }
     }
-
-
 }
