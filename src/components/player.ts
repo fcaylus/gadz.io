@@ -1,13 +1,5 @@
 import { Engine } from '../engine';
-import {
-    FRICTION,
-    GRAVITY,
-    GROUND_Y,
-    JUMP_VELOCITY,
-    MIN_PLAYER_HEIGHT_PX,
-    PLAYER_HEIGHT_PERCENTAGE,
-    PLAYER_POSITION_X
-} from '../constants';
+import { FRICTION, GRAVITY, GROUND_Y, JUMP_VELOCITY, PLAYER_WIDTH } from '../constants';
 import { GameVisualComponent } from '../interfaces/game-visual-component';
 
 export class Player extends GameVisualComponent {
@@ -15,8 +7,7 @@ export class Player extends GameVisualComponent {
     playerHandsUp: boolean;
     playerSpriteSelectorIntervalId: any;
 
-    x: number;
-    y: number;
+    dy: number;
     velocity: number;
     jumping: boolean;
     jumpCooldown: boolean;
@@ -32,18 +23,17 @@ export class Player extends GameVisualComponent {
 
     getBoundingBox(): BoundingBox {
         const sprite = this.playerSprite();
-        const h = this.playerHeight();
-        const w = this.playerWidth(h, sprite);
+        const w = PLAYER_WIDTH;
+        const h = w * sprite.height / sprite.width;
 
-        const x = this.playerX();
-        const y = this.playerY(h);
+        const x = 0 - w / 2;
+        const y = GROUND_Y + this.dy;
 
         return { x, y, w, h };
     }
 
     start() {
-        this.x = PLAYER_POSITION_X;
-        this.y = 0;
+        this.dy = 0;
         this.velocity = 0;
         this.jumping = false;
         this.jumpCooldown = false;
@@ -63,16 +53,16 @@ export class Player extends GameVisualComponent {
         const sprite = this.playerSprite();
         const { x, y, w, h } = this.getBoundingBox();
 
-        this.engine.ctx.drawImage(sprite, x, y, w, h);
+        this.engine.renderer.drawImage(sprite, x, y, w, h);
     }
 
     loop() {
-        this.y += this.velocity;
+        this.dy += this.velocity;
         this.velocity *= FRICTION;
         this.velocity -= GRAVITY;
 
-        if (this.y < 0) {
-            this.y = 0;
+        if (this.dy < 0) {
+            this.dy = 0;
             this.velocity = 0;
 
             if (this.jumping) {
@@ -94,28 +84,10 @@ export class Player extends GameVisualComponent {
         }
     }
 
-    private playerX(): number {
-        return this.x * this.engine.width();
-    }
-
-    private playerY(height): number {
-        const offset = this.engine.height() * GROUND_Y - height;
-        return offset - this.engine.height() * this.y;
-    }
-
     private playerSprite(): HTMLImageElement {
         if (this.jumping) {
             return this.playerSprites[1];
         }
         return this.playerHandsUp ? this.playerSprites[1] : this.playerSprites[0];
-    }
-
-    private playerHeight(): number {
-        return Math.max(MIN_PLAYER_HEIGHT_PX, this.engine.height() * PLAYER_HEIGHT_PERCENTAGE);
-    }
-
-    private playerWidth(height: number, sprite: HTMLImageElement) {
-        const ratio = sprite.width / sprite.height;
-        return ratio * height;
     }
 }

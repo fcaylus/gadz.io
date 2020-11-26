@@ -1,12 +1,12 @@
 import { Container } from './components/container';
+import { Renderer } from './renderer';
 
 let isGameRunning = false;
 let isDead = false;
 
 export class Engine {
-    canvas: HTMLCanvasElement;
     resourcesContainer: HTMLElement;
-    ctx: CanvasRenderingContext2D;
+    renderer: Renderer;
 
     gameContainer: Container;
     firstRender: boolean;
@@ -15,9 +15,7 @@ export class Engine {
         this.firstRender = true;
 
         this.resourcesContainer = resourcesContainer;
-        this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
-
+        this.renderer = new Renderer(canvas);
         this.gameContainer = new Container(this);
     }
 
@@ -51,11 +49,11 @@ export class Engine {
     }
 
     width() {
-        return this.canvas.width;
+        return this.renderer.width();
     }
 
     height() {
-        return this.canvas.height;
+        return this.renderer.height();
     }
 
     /**
@@ -77,10 +75,8 @@ export class Engine {
 
             this.firstRender = false;
 
-            this.resizeCanvas();
-
-            // Clear the whole canvas
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.renderer.resizeCanvas();
+            this.renderer.clear();
 
             this.gameContainer.loop();
             this.gameContainer.draw();
@@ -115,10 +111,5 @@ export class Engine {
     private newGame() {
         isDead = false;
         isGameRunning = true;
-    }
-
-    private resizeCanvas() {
-        this.canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        this.canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
     }
 }

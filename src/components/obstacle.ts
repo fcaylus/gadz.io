@@ -1,5 +1,5 @@
 import { Engine } from '../engine';
-import { GROUND_Y, MIN_PLAYER_HEIGHT_PX, PLAYER_HEIGHT_PERCENTAGE } from '../constants';
+import { GAME_SIZE, GROUND_Y, PLAYER_WIDTH } from '../constants';
 import { GameVisualComponent } from '../interfaces/game-visual-component';
 
 export class Obstacle extends GameVisualComponent {
@@ -10,7 +10,7 @@ export class Obstacle extends GameVisualComponent {
     constructor(engine: Engine, sprite: HTMLImageElement, velocity: number) {
         super(engine);
 
-        this.x = 1.0;
+        this.x = GAME_SIZE / 2;
         this.velocity = velocity;
 
         this.sprite = sprite;
@@ -22,11 +22,11 @@ export class Obstacle extends GameVisualComponent {
     }
 
     getBoundingBox(): BoundingBox {
-        const h = this.obstacleHeight();
-        const w = this.obstacleWidth(h);
+        const w = PLAYER_WIDTH;
+        const h = w * this.sprite.height / this.sprite.width;
 
-        const x = this.x * this.engine.width();
-        const y = GROUND_Y * this.engine.height() - h;
+        const x = this.x;
+        const y = GROUND_Y;
 
         return { x, y, w, h };
     }
@@ -39,19 +39,10 @@ export class Obstacle extends GameVisualComponent {
 
     draw() {
         const { x, y, w, h } = this.getBoundingBox();
-        this.engine.ctx.drawImage(this.sprite, x, y, w, h);
+        this.engine.renderer.drawImage(this.sprite, x, y, w, h);
     }
 
     loop() {
         this.x -= this.velocity;
-    }
-
-    private obstacleHeight(): number {
-        return Math.max(MIN_PLAYER_HEIGHT_PX, this.engine.height() * PLAYER_HEIGHT_PERCENTAGE) * 0.6;
-    }
-
-    private obstacleWidth(height: number) {
-        const ratio = this.sprite.width / this.sprite.height;
-        return ratio * height;
     }
 }
