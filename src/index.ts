@@ -1,5 +1,5 @@
 import { Game } from './game';
-import './assets/scss/index.scss';
+import './assets/style/index.scss';
 
 const game = new Game();
 game.run();
