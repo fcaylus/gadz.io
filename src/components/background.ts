@@ -26,9 +26,9 @@ export class Background extends GameVisualComponent {
             this.engine.ctx.fillStyle = colors[i];
             this.engine.ctx.fillRect(
                 0,
-                this.engine.canvas.height * levels[i],
+                this.engine.height() * levels[i],
                 this.engine.canvas.width,
-                this.engine.canvas.height * (levels[i + 1] - levels[i])
+                this.engine.height() * (levels[i + 1] - levels[i])
             );
         }
 

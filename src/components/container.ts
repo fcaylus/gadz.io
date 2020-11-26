@@ -4,7 +4,7 @@ import { GameVisualComponent } from '../interfaces/game-visual-component';
 import { Background } from './background';
 import { ObstacleManager } from './obstacle-manager';
 
-export class MainContainer extends GameVisualComponent {
+export class Container extends GameVisualComponent {
     player: Player;
     background: Background;
     obstacleManager: ObstacleManager;
@@ -18,17 +18,12 @@ export class MainContainer extends GameVisualComponent {
     }
 
     draw() {
-        // Clear the whole canvas
-        this.engine.ctx.clearRect(0, 0, this.engine.canvas.width, this.engine.canvas.height);
-
         this.background.draw();
         this.obstacleManager.draw();
         this.player.draw();
     }
 
     loop() {
-        this.engine.loop();
-
         this.background.loop();
         this.obstacleManager.loop();
         this.player.loop();
@@ -50,18 +45,3 @@ export class MainContainer extends GameVisualComponent {
         this.player.stop();
     }
 }
-
-/*
-        const _loop = () => {
-            if (!this.engine.isGameRunning()) {
-
-            }
-
-            this.loop();
-            this.draw();
-
-            window.requestAnimationFrame(_loop);
-        };
-
-        window.requestAnimationFrame(_loop);
- */

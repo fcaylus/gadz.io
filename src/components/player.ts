@@ -95,12 +95,12 @@ export class Player extends GameVisualComponent {
     }
 
     private playerX(): number {
-        return this.x * this.engine.canvas.width;
+        return this.x * this.engine.width();
     }
 
     private playerY(height): number {
-        const offset = this.engine.canvas.height * GROUND_Y - height;
-        return offset - this.engine.canvas.height * this.y;
+        const offset = this.engine.height() * GROUND_Y - height;
+        return offset - this.engine.height() * this.y;
     }
 
     private playerSprite(): HTMLImageElement {
@@ -111,7 +111,7 @@ export class Player extends GameVisualComponent {
     }
 
     private playerHeight(): number {
-        return Math.max(MIN_PLAYER_HEIGHT_PX, this.engine.canvas.height * PLAYER_HEIGHT_PERCENTAGE);
+        return Math.max(MIN_PLAYER_HEIGHT_PX, this.engine.height() * PLAYER_HEIGHT_PERCENTAGE);
     }
 
     private playerWidth(height: number, sprite: HTMLImageElement) {

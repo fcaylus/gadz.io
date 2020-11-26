@@ -1,5 +1,7 @@
-import { Game } from './game';
 import './assets/style/index.scss';
+import { Engine } from './engine';
 
-const game = new Game();
-game.run();
+const resourcesContainer = document.getElementById('resources-container');
+const canvas = document.getElementById('game') as HTMLCanvasElement;
+const engine = new Engine(canvas, resourcesContainer);
+engine.run();

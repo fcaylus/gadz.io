@@ -1,3 +1,5 @@
+import { Container } from './components/container';
+
 let isGameRunning = false;
 let isDead = false;
 
@@ -6,10 +8,17 @@ export class Engine {
     resourcesContainer: HTMLElement;
     ctx: CanvasRenderingContext2D;
 
+    gameContainer: Container;
+    firstRender: boolean;
+
     constructor(canvas: HTMLCanvasElement, resourcesContainer: HTMLElement) {
+        this.firstRender = true;
+
         this.resourcesContainer = resourcesContainer;
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
+
+        this.gameContainer = new Container(this);
     }
 
     loadImage(path: string): HTMLImageElement {
@@ -33,11 +42,6 @@ export class Engine {
         isGameRunning = false;
     }
 
-    newGame() {
-        isDead = false;
-        isGameRunning = true;
-    }
-
     isGameRunning() {
         return isGameRunning;
     }
@@ -46,8 +50,71 @@ export class Engine {
         return isDead;
     }
 
-    loop() {
-        this.resizeCanvas();
+    width() {
+        return this.canvas.width;
+    }
+
+    height() {
+        return this.canvas.height;
+    }
+
+    /**
+     * Game entrypoint. Should be called by the main JavaScript file.
+     */
+    run() {
+        // Main game loop
+        const _loop = () => {
+            // Stop the game
+            if (!this.firstRender && !this.isGameRunning()) {
+                if (this.isPlayerDead()) {
+                    document.getElementById('dead-popup').style.display = 'flex';
+                }
+
+                this.gameContainer.stop();
+
+                return;
+            }
+
+            this.firstRender = false;
+
+            this.resizeCanvas();
+
+            // Clear the whole canvas
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+            this.gameContainer.loop();
+            this.gameContainer.draw();
+
+            window.requestAnimationFrame(_loop);
+        };
+
+        this.registerKeyHandler(_loop);
+        this.gameContainer.start();
+        window.requestAnimationFrame(_loop);
+    }
+
+    private registerKeyHandler(gameLoop: () => void) {
+        document.onkeydown = (e) => {
+            if (e.code === 'Space') {
+                // Start the game if not running
+                if (!this.isGameRunning()) {
+                    document.getElementById('start-popup').style.display = 'none';
+                    document.getElementById('dead-popup').style.display = 'none';
+
+                    this.newGame();
+                    this.gameContainer.start();
+                    window.requestAnimationFrame(gameLoop);
+                } else {
+                    // Simply propagate the event
+                    this.gameContainer.onSpacePressed();
+                }
+            }
+        };
+    }
+
+    private newGame() {
+        isDead = false;
+        isGameRunning = true;
     }
 
     private resizeCanvas() {

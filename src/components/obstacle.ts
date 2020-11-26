@@ -25,8 +25,8 @@ export class Obstacle extends GameVisualComponent {
         const h = this.obstacleHeight();
         const w = this.obstacleWidth(h);
 
-        const x = this.x * this.engine.canvas.width;
-        const y = GROUND_Y * this.engine.canvas.height - h;
+        const x = this.x * this.engine.width();
+        const y = GROUND_Y * this.engine.height() - h;
 
         return { x, y, w, h };
     }
@@ -47,7 +47,7 @@ export class Obstacle extends GameVisualComponent {
     }
 
     private obstacleHeight(): number {
-        return Math.max(MIN_PLAYER_HEIGHT_PX, this.engine.canvas.height * PLAYER_HEIGHT_PERCENTAGE) * 0.6;
+        return Math.max(MIN_PLAYER_HEIGHT_PX, this.engine.height() * PLAYER_HEIGHT_PERCENTAGE) * 0.6;
     }
 
     private obstacleWidth(height: number) {
