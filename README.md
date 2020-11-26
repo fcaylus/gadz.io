@@ -24,6 +24,10 @@ yarn build
 
 I told you, nothing fancy.
 
+## Icons, images, visuals, and everything you can do with Illustrator
+
+Thanks [Arthur Jégouzo](https://www.linkedin.com/in/arthur-jegouzo/).
+
 ## License
 
 MIT
