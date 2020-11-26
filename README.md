@@ -1,6 +1,7 @@
 # gadz.io
 
-The simplest and ugliest jumping game you'll find on the internet !
+The simplest and ugliest jumping game you'll find on the internet ! But don't worry, one day, it will be the greatest
+game on earth !
 
 Try it out at [gadz.io](https://gadz.io) !
 
