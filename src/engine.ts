@@ -1,20 +1,28 @@
 import { Container } from './components/container';
 import { Renderer } from './renderer';
+import { OBSTACLE_VELOCITY } from './constants';
 
 let isGameRunning = false;
 let isDead = false;
 
 export class Engine {
     resourcesContainer: HTMLElement;
+    counterElement: HTMLElement;
     renderer: Renderer;
 
     gameContainer: Container;
     firstRender: boolean;
 
-    constructor(canvas: HTMLCanvasElement, resourcesContainer: HTMLElement) {
+    startTime: number;
+    lastCounterUpdate: number;
+
+    constructor() {
         this.firstRender = true;
 
-        this.resourcesContainer = resourcesContainer;
+        this.resourcesContainer = document.getElementById('resources-container');
+        this.counterElement = document.getElementById('counter');
+        const canvas = document.getElementById('game') as HTMLCanvasElement;
+
         this.renderer = new Renderer(canvas);
         this.gameContainer = new Container(this);
     }
@@ -40,22 +48,6 @@ export class Engine {
         isGameRunning = false;
     }
 
-    isGameRunning() {
-        return isGameRunning;
-    }
-
-    isPlayerDead() {
-        return isDead;
-    }
-
-    width() {
-        return this.renderer.width();
-    }
-
-    height() {
-        return this.renderer.height();
-    }
-
     /**
      * Game entrypoint. Should be called by the main JavaScript file.
      */
@@ -63,14 +55,18 @@ export class Engine {
         // Main game loop
         const _loop = () => {
             // Stop the game
-            if (!this.firstRender && !this.isGameRunning()) {
-                if (this.isPlayerDead()) {
+            if (!this.firstRender && !isGameRunning) {
+                if (isDead) {
                     document.getElementById('dead-popup').style.display = 'flex';
                 }
 
                 this.gameContainer.stop();
 
                 return;
+            }
+
+            if (!this.firstRender) {
+                this.updateCounter();
             }
 
             this.firstRender = false;
@@ -85,21 +81,20 @@ export class Engine {
         };
 
         this.registerKeyHandler(_loop);
-        this.gameContainer.start();
-        window.requestAnimationFrame(_loop);
+        this.newGame(_loop);
     }
 
     private registerKeyHandler(gameLoop: () => void) {
         document.onkeydown = (e) => {
             if (e.code === 'Space') {
                 // Start the game if not running
-                if (!this.isGameRunning()) {
+                if (!isGameRunning) {
                     document.getElementById('start-popup').style.display = 'none';
                     document.getElementById('dead-popup').style.display = 'none';
 
-                    this.newGame();
-                    this.gameContainer.start();
-                    window.requestAnimationFrame(gameLoop);
+                    isDead = false;
+                    isGameRunning = true;
+                    this.newGame(gameLoop);
                 } else {
                     // Simply propagate the event
                     this.gameContainer.onSpacePressed();
@@ -108,8 +103,22 @@ export class Engine {
         };
     }
 
-    private newGame() {
-        isDead = false;
-        isGameRunning = true;
+    private newGame(gameLoop: () => void) {
+        this.lastCounterUpdate = 0;
+        this.startTime = Date.now();
+
+        this.gameContainer.start();
+        window.requestAnimationFrame(gameLoop);
     }
+
+    private updateCounter() {
+        const now = Date.now();
+        if (now - this.lastCounterUpdate > 50) {
+            this.lastCounterUpdate = now;
+            const distance = OBSTACLE_VELOCITY * (now - this.startTime);
+            this.counterElement.innerText = `${Intl.NumberFormat('fr-FR').format(distance)} m`;
+        }
+    }
+
+
 }

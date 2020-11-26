@@ -38,6 +38,15 @@ body {
   background-color: grey;
 }
 
+#counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  font-size: 30px;
+  font-weight: bold;
+}
+
 #github-link {
   background: url("../img/github.svg") center;
   background-size: contain;
