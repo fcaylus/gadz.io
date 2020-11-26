@@ -39,7 +39,7 @@ body {
 }
 
 #github-link {
-  background: url("../img/github.png") center;
+  background: url("../img/github.svg") center;
   background-size: contain;
 
   width: 32px;
@@ -50,4 +50,8 @@ body {
   position: absolute;
   bottom: 5px;
   right: 5px;
+}
+
+#github-link:hover {
+  background: url("../img/github-hover.svg") center;
 }
