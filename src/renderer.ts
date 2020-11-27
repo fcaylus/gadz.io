@@ -45,14 +45,6 @@ export class Renderer {
         this.ctx = canvas.getContext('2d');
     }
 
-    width() {
-        return this.canvas.width;
-    }
-
-    height() {
-        return this.canvas.height;
-    }
-
     /**
      * Draw a rectangle, with coordinates as follows:
      *
