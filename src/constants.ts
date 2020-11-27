@@ -13,11 +13,14 @@ export const GROUND_Y = -100;
  */
 export const PLAYER_WIDTH = 50;
 
+export const MAX_JUMP_FRAMES = 10;
+
 // in unit/frame
 export const JUMP_VELOCITY = 50;
+export const JUMP_ADDITIONAL_VELOCITY = 5;
 export const GRAVITY = 4;
 // between 0 and 1
-export const FRICTION = 0.9;
+export const FRICTION = 0.7;
 
 export const OBSTACLE_SPAWN_CHANCE = 0.08;
 // in unit/frame

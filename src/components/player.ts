@@ -1,5 +1,13 @@
 import { Engine } from '../engine';
-import { FRICTION, GRAVITY, GROUND_Y, JUMP_VELOCITY, PLAYER_WIDTH } from '../constants';
+import {
+    FRICTION,
+    GRAVITY,
+    GROUND_Y,
+    JUMP_ADDITIONAL_VELOCITY,
+    JUMP_VELOCITY,
+    MAX_JUMP_FRAMES,
+    PLAYER_WIDTH
+} from '../constants';
 import { GameVisualComponent } from '../interfaces/game-visual-component';
 
 export class Player extends GameVisualComponent {
@@ -10,6 +18,10 @@ export class Player extends GameVisualComponent {
     dy: number;
     velocity: number;
     jumping: boolean;
+    // Count the number of frames the space bar was clicked
+    jumpingFrames: number;
+    // True as long as the user keep pressing the space bar
+    jumpingInitialPulse: boolean;
     jumpCooldown: boolean;
 
     constructor(engine: Engine) {
@@ -56,7 +68,23 @@ export class Player extends GameVisualComponent {
         this.engine.renderer.drawImage(sprite, x, y, w, h);
     }
 
-    loop() {
+    loop(spacePressed) {
+        if (spacePressed) {
+            if (!this.jumpCooldown) {
+                if (this.jumping && this.jumpingInitialPulse && this.jumpingFrames < MAX_JUMP_FRAMES) {
+                    this.jumpingFrames += 1;
+                    this.velocity += JUMP_ADDITIONAL_VELOCITY;
+                } else if (!this.jumping) {
+                    this.jumping = true;
+                    this.jumpingInitialPulse = true;
+                    this.jumpingFrames = 0;
+                    this.velocity = JUMP_VELOCITY;
+                }
+            }
+        } else {
+            this.jumpingInitialPulse = false;
+        }
+
         this.dy += this.velocity;
         this.velocity *= FRICTION;
         this.velocity -= GRAVITY;
@@ -72,15 +100,6 @@ export class Player extends GameVisualComponent {
                     this.jumpCooldown = false;
                 }, 10);
             }
-        }
-    }
-
-    onSpacePressed() {
-        super.onSpacePressed();
-
-        if (!this.jumping && !this.jumpCooldown) {
-            this.jumping = true;
-            this.velocity = JUMP_VELOCITY;
         }
     }
 

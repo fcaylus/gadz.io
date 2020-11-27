@@ -11,8 +11,5 @@ export abstract class GameComponent {
 
     abstract stop(): void;
 
-    abstract loop(): void;
-
-    onSpacePressed() {
-    }
+    abstract loop(spacePressed: boolean): void;
 }

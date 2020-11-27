@@ -23,14 +23,10 @@ export class Container extends GameVisualComponent {
         this.player.draw();
     }
 
-    loop() {
+    loop(spacePressed) {
         this.background.loop();
         this.obstacleManager.loop();
-        this.player.loop();
-    }
-
-    onSpacePressed() {
-        this.player.onSpacePressed();
+        this.player.loop(spacePressed);
     }
 
     start() {

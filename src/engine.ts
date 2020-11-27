@@ -17,6 +17,7 @@ export class Engine {
     lastCounterUpdate: number;
 
     isStopRequested: boolean;
+    spacePressed: boolean;
 
     constructor() {
         this.firstRender = true;
@@ -77,7 +78,7 @@ export class Engine {
             this.renderer.resizeCanvas();
             this.renderer.clear();
 
-            this.gameContainer.loop();
+            this.gameContainer.loop(this.spacePressed);
             this.gameContainer.draw();
 
             window.requestAnimationFrame(_loop);
@@ -88,6 +89,8 @@ export class Engine {
     }
 
     private registerEventListeners(gameLoop: () => void) {
+        this.spacePressed = false;
+
         const onSpacePressed = () => {
             // Start the game if not running
             if (!isGameRunning) {
@@ -100,7 +103,7 @@ export class Engine {
                 this.newGame(gameLoop);
             } else {
                 // Simply propagate the event
-                this.gameContainer.onSpacePressed();
+                this.spacePressed = true;
             }
         };
 
@@ -109,7 +112,15 @@ export class Engine {
                 onSpacePressed();
             }
         });
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'Space') {
+                this.spacePressed = false;
+            }
+        });
         document.addEventListener('touchstart', onSpacePressed);
+        document.addEventListener('touchend', () => {
+            this.spacePressed = false;
+        });
     }
 
     private newGame(gameLoop: () => void) {
