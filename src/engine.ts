@@ -83,28 +83,33 @@ export class Engine {
             window.requestAnimationFrame(_loop);
         };
 
-        this.registerKeyHandler(_loop);
+        this.registerEventListeners(_loop);
         this.newGame(_loop);
     }
 
-    private registerKeyHandler(gameLoop: () => void) {
-        document.onkeydown = (e) => {
-            if (e.code === 'Space') {
-                // Start the game if not running
-                if (!isGameRunning) {
-                    document.getElementById('start-popup').style.display = 'none';
-                    document.getElementById('dead-popup').style.display = 'none';
+    private registerEventListeners(gameLoop: () => void) {
+        const onSpacePressed = () => {
+            // Start the game if not running
+            if (!isGameRunning) {
+                document.getElementById('start-popup').style.display = 'none';
+                document.getElementById('dead-popup').style.display = 'none';
 
-                    isDead = false;
-                    isGameRunning = true;
-                    this.isStopRequested = false;
-                    this.newGame(gameLoop);
-                } else {
-                    // Simply propagate the event
-                    this.gameContainer.onSpacePressed();
-                }
+                isDead = false;
+                isGameRunning = true;
+                this.isStopRequested = false;
+                this.newGame(gameLoop);
+            } else {
+                // Simply propagate the event
+                this.gameContainer.onSpacePressed();
             }
         };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                onSpacePressed();
+            }
+        });
+        document.addEventListener('touchstart', onSpacePressed);
     }
 
     private newGame(gameLoop: () => void) {
