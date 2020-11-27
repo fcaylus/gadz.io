@@ -37,3 +37,5 @@ export const FRICTION = 0.7;
 export const COLOR_SKY = '#246af6';
 export const COLOR_GROUND_1 = '#b7632a';
 export const COLOR_GROUND_2 = '#138c15';
+
+export const COLOR_BACKGROUND = '#000000';

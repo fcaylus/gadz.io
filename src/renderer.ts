@@ -1,4 +1,4 @@
-import { GAME_SIZE } from './constants';
+import { COLOR_BACKGROUND, GAME_SIZE } from './constants';
 
 /**
  * Game renderer that handle all canvas drawing.
@@ -54,11 +54,19 @@ export class Renderer {
      *  (x, y) ----- (x+w, y)
      */
     drawRect(x: number, y: number, w: number, h: number, color: string) {
-        const my = this.mapY(y);
-        const mh = this.scale(h);
+        let my = this.mapY(y);
+        let mh = this.scale(h);
 
         if (this.isOutsideY(my) && this.isOutsideY(my - mh)) {
             return;
+        }
+
+        // Special case, for drawing at the top and bottom border
+        if (y + h >= GAME_SIZE / 2) {
+            mh = my;
+        } else if (y <= -GAME_SIZE / 2) {
+            mh += (this.canvas.height - my);
+            my = this.canvas.height;
         }
 
         this.ctx.fillStyle = color;
@@ -85,7 +93,8 @@ export class Renderer {
     }
 
     clear() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = COLOR_BACKGROUND;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     resizeCanvas() {
