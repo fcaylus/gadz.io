@@ -13,6 +13,13 @@ export const GROUND_Y = -100;
  */
 export const PLAYER_WIDTH = 50;
 
+// in unit/frame
+export const PLAYER_INITIAL_SPEED = 10;
+// in unit/frame
+export const PLAYER_SPEED_INCREMENT = 1;
+// in frames
+export const PLAYER_SPEED_INCREMENT_DURATION = 500;
+
 export const MAX_JUMP_FRAMES = 10;
 
 // in unit/frame
@@ -23,8 +30,6 @@ export const GRAVITY = 4;
 export const FRICTION = 0.7;
 
 export const OBSTACLE_SPAWN_CHANCE = 0.08;
-// in unit/frame
-export const OBSTACLE_VELOCITY = 10;
 
 export const COLOR_SKY = '#246af6';
 export const COLOR_GROUND_1 = '#b7632a';

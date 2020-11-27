@@ -5,13 +5,11 @@ import { GameVisualComponent } from '../interfaces/game-visual-component';
 export class Obstacle extends GameVisualComponent {
     sprite: HTMLImageElement;
     x: number;
-    velocity: number;
 
-    constructor(engine: Engine, sprite: HTMLImageElement, velocity: number) {
+    constructor(engine: Engine, sprite: HTMLImageElement) {
         super(engine);
 
         this.x = GAME_SIZE / 2;
-        this.velocity = velocity;
 
         this.sprite = sprite;
     }
@@ -43,6 +41,6 @@ export class Obstacle extends GameVisualComponent {
     }
 
     loop() {
-        this.x -= this.velocity;
+        this.x -= this.engine.currentSpeed();
     }
 }

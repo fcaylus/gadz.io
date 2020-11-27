@@ -1,5 +1,5 @@
 import { Engine } from '../engine';
-import { OBSTACLE_SPAWN_CHANCE, OBSTACLE_VELOCITY } from '../constants';
+import { OBSTACLE_SPAWN_CHANCE } from '../constants';
 import { GameVisualComponent } from '../interfaces/game-visual-component';
 import { Obstacle } from './obstacle';
 import { Player } from './player';
@@ -28,7 +28,7 @@ export class ObstacleManager extends GameVisualComponent {
 
         this.newObstacleIntervalId = setInterval(() => {
             if (!this.newObstacleCooldown && Math.random() <= OBSTACLE_SPAWN_CHANCE) {
-                const obstacle = new Obstacle(this.engine, this.sprite, OBSTACLE_VELOCITY);
+                const obstacle = new Obstacle(this.engine, this.sprite);
                 obstacle.start();
                 this.obstacles.push(obstacle);
                 this.newObstacleCooldown = true;

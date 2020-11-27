@@ -1,6 +1,6 @@
 import { Container } from './components/container';
 import { Renderer } from './renderer';
-import { OBSTACLE_VELOCITY } from './constants';
+import { PLAYER_INITIAL_SPEED, PLAYER_SPEED_INCREMENT, PLAYER_SPEED_INCREMENT_DURATION } from './constants';
 
 let isGameRunning = false;
 let isDead = false;
@@ -13,7 +13,7 @@ export class Engine {
     gameContainer: Container;
     firstRender: boolean;
 
-    startTime: number;
+    frameCount: number;
     lastCounterUpdate: number;
 
     isStopRequested: boolean;
@@ -46,6 +46,10 @@ export class Engine {
             && bb1.y + bb1.h > bb2.y);
     }
 
+    currentSpeed() {
+        return PLAYER_INITIAL_SPEED + Math.floor(this.frameCount / PLAYER_SPEED_INCREMENT_DURATION) * PLAYER_SPEED_INCREMENT;
+    }
+
     gameOver() {
         console.log('💀  Game over !');
         isDead = true;
@@ -74,6 +78,7 @@ export class Engine {
             }
 
             this.firstRender = false;
+            this.frameCount += 1;
 
             this.renderer.resizeCanvas();
             this.renderer.clear();
@@ -125,17 +130,26 @@ export class Engine {
 
     private newGame(gameLoop: () => void) {
         this.lastCounterUpdate = 0;
-        this.startTime = Date.now();
+        this.frameCount = 0;
 
         this.gameContainer.start();
         window.requestAnimationFrame(gameLoop);
     }
 
     private updateCounter() {
+        // Only update the counter every 50 ms
         const now = Date.now();
-        if (now - this.lastCounterUpdate > 50) {
+        if (now - this.lastCounterUpdate > 48) {
             this.lastCounterUpdate = now;
-            const distance = OBSTACLE_VELOCITY * (now - this.startTime);
+
+            const numberOfChunkFullyRan = Math.floor(this.frameCount / PLAYER_SPEED_INCREMENT_DURATION);
+            let distance = 0;
+            for (let i = 0; i < numberOfChunkFullyRan; i++) {
+                distance += PLAYER_SPEED_INCREMENT_DURATION * (PLAYER_INITIAL_SPEED + i * PLAYER_SPEED_INCREMENT);
+            }
+            // Add the distance of the "current chunk"
+            distance += (this.frameCount - numberOfChunkFullyRan * PLAYER_SPEED_INCREMENT_DURATION) * (PLAYER_INITIAL_SPEED + numberOfChunkFullyRan * PLAYER_SPEED_INCREMENT);
+
             this.counterElement.innerText = `${Intl.NumberFormat('fr-FR').format(distance)} m`;
         }
     }
