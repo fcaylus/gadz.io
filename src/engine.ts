@@ -1,6 +1,14 @@
 import { Container } from './components/container';
 import { Renderer } from './renderer';
-import { PLAYER_INITIAL_SPEED, PLAYER_SPEED_INCREMENT, PLAYER_SPEED_INCREMENT_DURATION } from './constants';
+import {
+    OBSTACLE_INITIAL_SPAWN_CHANCE,
+    OBSTACLE_MAX_SPAWN_CHANCE,
+    OBSTACLE_SPAWN_CHANCE_INCREMENT,
+    OBSTACLE_SPAWN_CHANCE_INCREMENT_DURATION,
+    PLAYER_INITIAL_SPEED,
+    PLAYER_SPEED_INCREMENT,
+    PLAYER_SPEED_INCREMENT_DURATION
+} from './constants';
 
 let isGameRunning = false;
 let isDead = false;
@@ -48,6 +56,10 @@ export class Engine {
 
     currentSpeed() {
         return PLAYER_INITIAL_SPEED + Math.floor(this.frameCount / PLAYER_SPEED_INCREMENT_DURATION) * PLAYER_SPEED_INCREMENT;
+    }
+
+    currentSpawnChance() {
+        return Math.min(OBSTACLE_MAX_SPAWN_CHANCE, OBSTACLE_INITIAL_SPAWN_CHANCE + Math.floor(this.frameCount / OBSTACLE_SPAWN_CHANCE_INCREMENT_DURATION) * OBSTACLE_SPAWN_CHANCE_INCREMENT);
     }
 
     gameOver() {
@@ -139,7 +151,7 @@ export class Engine {
     private updateCounter() {
         // Only update the counter every 50 ms
         const now = Date.now();
-        if (now - this.lastCounterUpdate > 48) {
+        if (now - this.lastCounterUpdate > 50) {
             this.lastCounterUpdate = now;
 
             const numberOfChunkFullyRan = Math.floor(this.frameCount / PLAYER_SPEED_INCREMENT_DURATION);

@@ -20,6 +20,11 @@ export const PLAYER_SPEED_INCREMENT = 1;
 // in frames
 export const PLAYER_SPEED_INCREMENT_DURATION = 500;
 
+export const OBSTACLE_INITIAL_SPAWN_CHANCE = 0.08;
+export const OBSTACLE_SPAWN_CHANCE_INCREMENT = 0.005;
+export const OBSTACLE_SPAWN_CHANCE_INCREMENT_DURATION = 500;
+export const OBSTACLE_MAX_SPAWN_CHANCE = 0.5;
+
 export const MAX_JUMP_FRAMES = 10;
 
 // in unit/frame
@@ -28,8 +33,6 @@ export const JUMP_ADDITIONAL_VELOCITY = 5;
 export const GRAVITY = 4;
 // between 0 and 1
 export const FRICTION = 0.7;
-
-export const OBSTACLE_SPAWN_CHANCE = 0.08;
 
 export const COLOR_SKY = '#246af6';
 export const COLOR_GROUND_1 = '#b7632a';

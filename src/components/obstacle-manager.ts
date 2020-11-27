@@ -1,5 +1,4 @@
 import { Engine } from '../engine';
-import { OBSTACLE_SPAWN_CHANCE } from '../constants';
 import { GameVisualComponent } from '../interfaces/game-visual-component';
 import { Obstacle } from './obstacle';
 import { Player } from './player';
@@ -20,25 +19,7 @@ export class ObstacleManager extends GameVisualComponent {
         this.sprite = this.engine.loadImage(require('../assets/img/barrier.svg').default);
     }
 
-    start() {
-        delete this.obstacles;
-        this.obstacles = [];
-
-        this.newObstacleCooldown = false;
-
-        this.newObstacleIntervalId = setInterval(() => {
-            if (!this.newObstacleCooldown && Math.random() <= OBSTACLE_SPAWN_CHANCE) {
-                const obstacle = new Obstacle(this.engine, this.sprite);
-                obstacle.start();
-                this.obstacles.push(obstacle);
-                this.newObstacleCooldown = true;
-
-                setTimeout(() => {
-                    this.newObstacleCooldown = false;
-                }, 500);
-            }
-        }, 100);
-    }
+    private;
 
     stop() {
         clearInterval(this.newObstacleIntervalId);
@@ -60,5 +41,25 @@ export class ObstacleManager extends GameVisualComponent {
                 this.engine.gameOver();
             }
         });
+    }
+
+    start() {
+        delete this.obstacles;
+        this.obstacles = [];
+
+        this.newObstacleCooldown = false;
+
+        this.newObstacleIntervalId = setInterval(() => {
+            if (!this.newObstacleCooldown && Math.random() <= this.engine.currentSpawnChance()) {
+                const obstacle = new Obstacle(this.engine, this.sprite);
+                obstacle.start();
+                this.obstacles.push(obstacle);
+                this.newObstacleCooldown = true;
+
+                setTimeout(() => {
+                    this.newObstacleCooldown = false;
+                }, 500);
+            }
+        }, 100);
     }
 }
