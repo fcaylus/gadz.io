@@ -117,6 +117,7 @@ export class Engine {
                 isDead = false;
                 isGameRunning = true;
                 this.isStopRequested = false;
+                this.newGame();
             } else {
                 // Simply propagate the event
                 this.spacePressed = true;
