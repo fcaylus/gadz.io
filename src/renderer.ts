@@ -1,4 +1,4 @@
-import { COLOR_BACKGROUND, GAME_SIZE } from './constants';
+import { COLOR_BACKGROUND_RESET, GAME_SIZE } from './constants';
 
 /**
  * Game renderer that handle all canvas drawing.
@@ -65,7 +65,7 @@ export class Renderer {
         if (y + h >= GAME_SIZE / 2) {
             mh = my;
         } else if (y <= -GAME_SIZE / 2) {
-            mh += (this.canvas.height - my);
+            mh += this.canvas.height - my;
             my = this.canvas.height;
         }
 
@@ -92,8 +92,20 @@ export class Renderer {
         this.ctx.drawImage(image, this.mapX(x), my - mh, this.scale(w), mh);
     }
 
+    /**
+     * Draw a text, centered around (cx, cy) and with the specified text height
+     */
+    drawTextCentered(text: string, textHeight: number, font: string, color: string, cx: number, cy: number) {
+        this.ctx.textBaseline = 'middle';
+        this.ctx.textAlign = 'center';
+        this.ctx.font = `${this.scale(textHeight)}px ${font}`;
+        this.ctx.fillStyle = color;
+
+        this.ctx.fillText(text, this.mapX(cx), this.mapY(cy));
+    }
+
     clear() {
-        this.ctx.fillStyle = COLOR_BACKGROUND;
+        this.ctx.fillStyle = COLOR_BACKGROUND_RESET;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -103,7 +115,7 @@ export class Renderer {
     }
 
     private scale(val: number) {
-        return val * this.canvas.width / GAME_SIZE;
+        return (val * this.canvas.width) / GAME_SIZE;
     }
 
     private mapX(x: number) {
@@ -111,7 +123,7 @@ export class Renderer {
     }
 
     private mapY(y: number) {
-        return (this.canvas.height / 2) - this.scale(y);
+        return this.canvas.height / 2 - this.scale(y);
     }
 
     private isOutsideY(y: number) {

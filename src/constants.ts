@@ -34,8 +34,7 @@ export const GRAVITY = 4;
 // between 0 and 1
 export const FRICTION = 0.7;
 
-export const COLOR_SKY = '#246af6';
-export const COLOR_GROUND_1 = '#b7632a';
-export const COLOR_GROUND_2 = '#138c15';
+export const COLOR_SKY = '#2B424A';
+export const COLOR_GROUND = '#683e2b';
 
-export const COLOR_BACKGROUND = '#000000';
+export const COLOR_BACKGROUND_RESET = '#000000';

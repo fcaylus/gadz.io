@@ -19,8 +19,7 @@ body {
   display: none !important;
 }
 
-#dead-popup,
-#start-popup {
+#dead-popup {
   @extend %fullscreen;
 }
 
@@ -45,6 +44,8 @@ body {
 
   font-size: 30px;
   font-weight: bold;
+
+  color: white;
 }
 
 #github-link {
