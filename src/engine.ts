@@ -1,6 +1,7 @@
 import { Container } from './components/container';
 import { Renderer } from './renderer';
 import {
+    MIN_INTERVAL,
     OBSTACLE_INITIAL_SPAWN_CHANCE,
     OBSTACLE_MAX_SPAWN_CHANCE,
     OBSTACLE_SPAWN_CHANCE_INCREMENT,
@@ -10,6 +11,7 @@ import {
     PLAYER_SPEED_INCREMENT_DURATION,
 } from './constants';
 import { SpriteManager } from './sprite-manager';
+import { IntervalCallback } from './interfaces/interval-callback';
 
 let isGameRunning = false;
 let isDead = false;
@@ -26,6 +28,8 @@ export class Engine {
 
     isStopRequested: boolean;
     spacePressed: boolean;
+
+    private registeredIntervals: IntervalCallback[] = [];
 
     constructor() {
         this.isStopRequested = false;
@@ -101,9 +105,52 @@ export class Engine {
             window.requestAnimationFrame(_loop);
         };
 
+        window.setInterval(() => {
+            const callbacksToCall = [];
+            this.registeredIntervals = this.registeredIntervals.map((interval) => {
+                interval.timeToNextInterval -= MIN_INTERVAL;
+                if (interval.timeToNextInterval <= 0) {
+                    callbacksToCall.push(interval.callback);
+                    interval.timeToNextInterval = interval.interval;
+                }
+
+                return interval;
+            });
+
+            callbacksToCall.forEach((callback) => callback());
+        }, MIN_INTERVAL);
+
         this.registerEventListeners();
         this.newGame();
         window.requestAnimationFrame(_loop);
+    }
+
+    /**
+     * All registered intervals are executed in a single interval callback.
+     * The granularity for the MIN_INTERVAL value is 20ms.
+     */
+    registerIntervalCallback(name: string, interval: number, callback: () => void): boolean {
+        if (this.intervalExistsCallback(name)) {
+            return false;
+        }
+
+        const intervalObj: IntervalCallback = {
+            name,
+            interval,
+            callback,
+            timeToNextInterval: interval,
+        };
+
+        this.registeredIntervals.push(intervalObj);
+        return true;
+    }
+
+    removeIntervalCallback(name: string) {
+        this.registeredIntervals = this.registeredIntervals.filter((interval) => interval.name !== name);
+    }
+
+    intervalExistsCallback(name: string): boolean {
+        return !!this.registeredIntervals.find((interval) => interval.name === name);
     }
 
     private registerEventListeners() {

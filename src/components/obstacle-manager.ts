@@ -5,7 +5,6 @@ import { Player } from './player';
 
 export class ObstacleManager extends GameVisualComponent {
     obstacles: Obstacle[];
-    newObstacleIntervalId: any;
     newObstacleCooldown: boolean;
     player: Player;
 
@@ -19,15 +18,8 @@ export class ObstacleManager extends GameVisualComponent {
         this.sprite = this.engine.loadImage(require('../assets/img/barrier.svg').default);
     }
 
-    private;
-
-    stop() {
-        clearInterval(this.newObstacleIntervalId);
-        this.obstacles.forEach(obstacle => obstacle.stop());
-    }
-
     draw() {
-        this.obstacles.forEach(obstacle => obstacle.draw());
+        this.obstacles.forEach((obstacle) => obstacle.draw());
     }
 
     loop() {
@@ -49,7 +41,7 @@ export class ObstacleManager extends GameVisualComponent {
 
         this.newObstacleCooldown = false;
 
-        this.newObstacleIntervalId = setInterval(() => {
+        this.engine.registerIntervalCallback('obstacle-move', 100, () => {
             if (!this.newObstacleCooldown && Math.random() <= this.engine.currentSpawnChance()) {
                 const obstacle = new Obstacle(this.engine, this.sprite);
                 obstacle.start();
@@ -60,6 +52,11 @@ export class ObstacleManager extends GameVisualComponent {
                     this.newObstacleCooldown = false;
                 }, 500);
             }
-        }, 100);
+        });
+    }
+
+    stop() {
+        this.engine.removeIntervalCallback('obstacle-move');
+        this.obstacles.forEach((obstacle) => obstacle.stop());
     }
 }

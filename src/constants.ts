@@ -34,6 +34,11 @@ export const GRAVITY = 4;
 // between 0 and 1
 export const FRICTION = 0.7;
 
+/**
+ * Minimum interval in ms that can be used to register a callback
+ */
+export const MIN_INTERVAL = 20;
+
 export const COLOR_SKY = '#2B424A';
 export const COLOR_GROUND = '#683e2b';
 

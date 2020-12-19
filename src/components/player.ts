@@ -6,14 +6,13 @@ import {
     JUMP_ADDITIONAL_VELOCITY,
     JUMP_VELOCITY,
     MAX_JUMP_FRAMES,
-    PLAYER_WIDTH
+    PLAYER_WIDTH,
 } from '../constants';
 import { GameVisualComponent } from '../interfaces/game-visual-component';
 
 export class Player extends GameVisualComponent {
     playerSprites: HTMLImageElement[];
     playerHandsUp: boolean;
-    playerSpriteSelectorIntervalId: any;
 
     dy: number;
     velocity: number;
@@ -29,14 +28,14 @@ export class Player extends GameVisualComponent {
 
         this.playerSprites = [
             this.engine.loadImage(require('../assets/img/player-1.svg').default),
-            this.engine.loadImage(require('../assets/img/player-2.svg').default)
+            this.engine.loadImage(require('../assets/img/player-2.svg').default,
         ];
     }
 
     getBoundingBox(): BoundingBox {
         const sprite = this.playerSprite();
         const w = PLAYER_WIDTH;
-        const h = w * sprite.height / sprite.width;
+        const h = (w * sprite.height) / sprite.width;
 
         const x = 0 - w / 2;
         const y = GROUND_Y + this.dy;
@@ -52,13 +51,13 @@ export class Player extends GameVisualComponent {
 
         this.playerHandsUp = false;
 
-        this.playerSpriteSelectorIntervalId = setInterval(() => {
+        this.engine.registerIntervalCallback('player-sprite', 200, () => {
             this.playerHandsUp = !this.playerHandsUp;
-        }, 200);
+        });
     }
 
     stop() {
-        clearInterval(this.playerSpriteSelectorIntervalId);
+        this.engine.removeIntervalCallback('player-sprite');
     }
 
     draw() {
