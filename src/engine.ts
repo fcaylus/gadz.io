@@ -84,12 +84,17 @@ export class Engine {
                 }
 
                 this.gameContainer.stop();
+                this.isStopRequested = false;
                 isGameRunning = false;
-            } else if (!isDead && !isGameRunning) {
+            } else if (!isGameRunning) {
                 this.renderer.resizeCanvas();
-                this.spriteManager.allSpritesLoaded().then(() => {
-                    this.gameContainer.drawHomeScreen();
-                });
+                if (isDead) {
+                    this.gameContainer.draw();
+                } else {
+                    this.spriteManager.allSpritesLoaded().then(() => {
+                        this.gameContainer.drawHomeScreen();
+                    });
+                }
             } else {
                 this.updateCounter();
 
