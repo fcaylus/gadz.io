@@ -28,7 +28,7 @@ export class Player extends GameVisualComponent {
 
         this.playerSprites = [
             this.engine.loadImage(require('../assets/img/player-1.svg').default),
-            this.engine.loadImage(require('../assets/img/player-2.svg').default,
+            this.engine.loadImage(require('../assets/img/player-2.svg').default),
         ];
     }
 

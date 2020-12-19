@@ -54,7 +54,7 @@ if (mode === 'production') {
 } else {
     config = merge(commonConfig, {
         devtool: 'eval-cheap-module-source-map',
-        plugins: [new webpack.HotModuleReplacementPlugin(),
+        plugins: [new webpack.HotModuleReplacementPlugin()],
     });
 }
 
