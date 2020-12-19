@@ -48,13 +48,13 @@ if (mode === 'production') {
         output: {
             filename: 'js/bundle.[contenthash].min.js',
             path: resolve(__dirname, 'dist'),
-            publicPath '/',
+            publicPath: '/',
         },
     });
 } else {
     config = merge(commonConfig, {
         devtool: 'eval-cheap-module-source-map',
-        plugins: [new webpack.HotModuleReplacementPlugin()]
+        plugins: [new webpack.HotModuleReplacementPlugin(),
     });
 }
 
