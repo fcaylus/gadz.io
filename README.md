@@ -7,6 +7,8 @@ Try it out at [gadz.io](https://gadz.io) !
 
 ![Screenshot](screenshot.gif)
 
+(hosted on [vercel.com](https://vercel.com))
+
 ## Ok, but why this project ???
 
 Because I never used HTML canvas before, and it was a fun way of experimenting with it !
