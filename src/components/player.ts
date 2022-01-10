@@ -4,6 +4,7 @@ import {
     GRAVITY,
     GROUND_Y,
     JUMP_ADDITIONAL_VELOCITY,
+    JUMP_COOLDOWN_DURATION,
     JUMP_VELOCITY,
     MAX_JUMP_FRAMES,
     PLAYER_WIDTH,
@@ -27,7 +28,9 @@ export class Player extends GameVisualComponent {
         super(engine);
 
         this.playerSprites = [
+            // w/ hands "down"
             this.engine.loadImage(require('../assets/img/player-1.svg').default),
+            // w/ hands "up"
             this.engine.loadImage(require('../assets/img/player-2.svg').default),
         ];
     }
@@ -70,10 +73,12 @@ export class Player extends GameVisualComponent {
     loop(spacePressed) {
         if (spacePressed) {
             if (!this.jumpCooldown) {
+                // "in jump" space bar pressed, so the player can jump higher
                 if (this.jumping && this.jumpingInitialPulse && this.jumpingFrames < MAX_JUMP_FRAMES) {
                     this.jumpingFrames += 1;
                     this.velocity += JUMP_ADDITIONAL_VELOCITY;
                 } else if (!this.jumping) {
+                    // start jumping
                     this.jumping = true;
                     this.jumpingInitialPulse = true;
                     this.jumpingFrames = 0;
@@ -85,27 +90,29 @@ export class Player extends GameVisualComponent {
         }
 
         this.dy += this.velocity;
-        this.velocity *= FRICTION;
-        this.velocity -= GRAVITY;
+        this.velocity = this.velocity * FRICTION - GRAVITY;
 
         if (this.dy < 0) {
             this.dy = 0;
             this.velocity = 0;
 
+            // stop jumping when the ground is reached
             if (this.jumping) {
                 this.jumping = false;
                 this.jumpCooldown = true;
                 setTimeout(() => {
                     this.jumpCooldown = false;
-                }, 10);
+                }, JUMP_COOLDOWN_DURATION);
             }
         }
     }
 
     private playerSprite(): HTMLImageElement {
+        // always shows "hands up" while jumping
         if (this.jumping) {
             return this.playerSprites[1];
         }
+
         return this.playerHandsUp ? this.playerSprites[1] : this.playerSprites[0];
     }
 }

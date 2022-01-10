@@ -1,5 +1,5 @@
 /**
- * Dimensions of the game (in game unit, abbreviated unit)
+ * Dimensions of the game (in game unit, abbreviated "unit" in the following)
  */
 export const GAME_SIZE = 1000;
 
@@ -31,6 +31,8 @@ export const MAX_JUMP_FRAMES = 10;
 export const JUMP_VELOCITY = 50;
 export const JUMP_ADDITIONAL_VELOCITY = 5;
 export const GRAVITY = 4;
+// in ms
+export const JUMP_COOLDOWN_DURATION = 10;
 // between 0 and 1
 export const FRICTION = 0.7;
 

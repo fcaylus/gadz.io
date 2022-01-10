@@ -11,6 +11,7 @@ export class SpriteManager {
         this.resourcesContainer = document.getElementById('resources-container');
     }
 
+    // Load the sprites into an `img` element, and register them in the sprites map
     loadSprite(path: string): HTMLImageElement {
         if (this.sprites.has(path)) {
             return this.sprites.get(path).img;
@@ -24,6 +25,7 @@ export class SpriteManager {
         this.sprites.set(path, sprite);
 
         const that = this;
+        // Update the sprite map when the image is loaded
         sprite.img.onload = function () {
             const s = that.sprites.get(path);
             s.loaded = true;

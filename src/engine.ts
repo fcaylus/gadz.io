@@ -110,21 +110,7 @@ export class Engine {
             window.requestAnimationFrame(_loop);
         };
 
-        window.setInterval(() => {
-            const callbacksToCall = [];
-            this.registeredIntervals = this.registeredIntervals.map((interval) => {
-                interval.timeToNextInterval -= MIN_INTERVAL;
-                if (interval.timeToNextInterval <= 0) {
-                    callbacksToCall.push(interval.callback);
-                    interval.timeToNextInterval = interval.interval;
-                }
-
-                return interval;
-            });
-
-            callbacksToCall.forEach((callback) => callback());
-        }, MIN_INTERVAL);
-
+        this.registerIntervalHandler();
         this.registerEventListeners();
         this.newGame();
         window.requestAnimationFrame(_loop);
@@ -156,6 +142,25 @@ export class Engine {
 
     intervalExistsCallback(name: string): boolean {
         return !!this.registeredIntervals.find((interval) => interval.name === name);
+    }
+
+    // All intervals in the game are handled by this main interval
+    // See registerIntervalCallback() to add new interval
+    private registerIntervalHandler() {
+        window.setInterval(() => {
+            const callbacksToCall = [];
+            this.registeredIntervals = this.registeredIntervals.map((interval) => {
+                interval.timeToNextInterval -= MIN_INTERVAL;
+                if (interval.timeToNextInterval <= 0) {
+                    callbacksToCall.push(interval.callback);
+                    interval.timeToNextInterval = interval.interval;
+                }
+
+                return interval;
+            });
+
+            callbacksToCall.forEach((callback) => callback());
+        }, MIN_INTERVAL);
     }
 
     private registerEventListeners() {
