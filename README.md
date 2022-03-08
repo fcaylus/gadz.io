@@ -3,7 +3,7 @@
 The simplest jumping game you'll find on the internet ! But don't worry, one day, it will be the greatest game on
 earth !
 
-Try it out at [gadz.io](https://gadz.io) !
+Try it out at [gadz.io](https://gadz-io.vercel.app) !
 
 ![Screenshot](screenshot.gif)
 
